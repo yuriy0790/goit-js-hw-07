@@ -22,30 +22,22 @@ const galleryImgMarkup = galleryItems
   .join('');
 listEl.insertAdjacentHTML('beforeend', galleryImgMarkup);
 
-function createLightBox(img) {
-  const instance = basicLightbox.create(`<img src="${img.dataset.source}">`, {
-    onShow: instance => {
-      document.addEventListener('keydown', closeImg.bind(instance));
-    },
-    onClose: instance => {
-      document.removeEventListener('keydown', closeImg.bind(instance));
-    },
-  });
-
-  instance.show();
-}
-
-const onImgClick = event => {
+function onImgClick(event) {
   event.preventDefault();
   if (event.target.nodeName !== 'IMG') {
     return;
   }
-  createLightBox(event.target);
-};
+  const instance = basicLightbox.create(
+    `<img src="${event.target.dataset.source}" alt="${event.target.alt}">`
+  );
+  instance.show();
 
-function closeImg(event) {
-  if (event.code === 'Escape') {
-    this.close();
+  document.addEventListener('keydown', onEsc);
+  function onEsc(event) {
+    if (event.code === 'Escape') {
+      document.removeEventListener('keydown', onEsc);
+      instance.close();
+    }
   }
 }
 
