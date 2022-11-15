@@ -32,13 +32,13 @@ function onImgClick(event) {
   );
   instance.show();
 
-  document.addEventListener('keydown', onEsc);
-  function onEsc(event) {
-    if (event.code === 'Escape') {
-      document.removeEventListener('keydown', onEsc);
-      instance.close();
-    }
-  }
+  document.addEventListener('keydown', onEsc.bind(instance));
 }
 
+function onEsc(event) {
+  if (event.code === 'Escape') {
+    document.removeEventListener('keydown', onEsc);
+    this.close();
+  }
+}
 listEl.addEventListener('click', onImgClick);
